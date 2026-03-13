@@ -33,6 +33,8 @@ jobs:
         run: terraform plan
         working-directory: ./TF
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+
+      - name: Terraform Destroy
+        if: github.ref == 'refs/heads/dev'
+        run: terraform destroy -auto-approve
         working-directory: ./TF
