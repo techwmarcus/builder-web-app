@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from pydantic import BaseModel
+import psycopg2
+
 
 app = FastAPI()
 app.add_middleware(
@@ -12,6 +14,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 origins = ["http://localhost:3000"]
+
+
+conn = psycopg2.connect(
+    host="react-app-db.xxxxxx.us-west-1.rds.amazonaws.com",
+    database="appdb",
+    user="admin",
+    password="supersecurepassword"
+)
 
 projects = []
 expenses = []
