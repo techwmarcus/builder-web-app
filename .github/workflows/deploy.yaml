@@ -23,10 +23,14 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.14.7
+          terraform_version: 1.14.7 
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ./TF
+
+      - name: Terraform environment name
+        run: terraform workspace select ${{ github.ref_name }} || terraform workspace new ${{ github.ref_name }}
         working-directory: ./TF
 
       - name: Terraform Plan

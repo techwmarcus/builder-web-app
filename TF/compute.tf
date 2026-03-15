@@ -1,5 +1,8 @@
 resource "aws_ecs_cluster" "app_cluster" {
   name = "app-cluster"
+    tags = {
+    Name = "app-cluster-${terraform.workspace}"  
+  }
 
 }
 resource "aws_iam_role" "ecs_task_execution_role" {
@@ -17,6 +20,9 @@ resource "aws_iam_role" "ecs_task_execution_role" {
       }
     ]
   })
+    tags = {
+    Name = "ecs-task-execution-role-${terraform.workspace}"  
+  }
 }
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
   role       = aws_iam_role.ecs_task_execution_role.name
@@ -24,6 +30,9 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
 }
 resource "aws_iam_user" "ecr_user" {
   name = "ecr-user"
+    tags = {
+    Name = "ecr-user-${terraform.workspace}"  
+  }
 }
 resource "aws_iam_user_policy_attachment" "name" {
     user       = aws_iam_user.ecr_user.name
@@ -52,6 +61,9 @@ resource "aws_ecs_task_definition" "app_task" {
       ]
     }
   ])
+    tags = {
+    Name = "app-task-${terraform.workspace}"  
+  }
 }
 resource "aws_ecs_service" "app_service" {
   name = "app-tasks"
@@ -70,12 +82,18 @@ resource "aws_ecs_service" "app_service" {
     container_name   = "app-task"
     container_port   = 80
   }
+    tags = {
+    Name = "app-service-${terraform.workspace}"  
+  }
 }
 resource "aws_lb" "app_alb" {
   name               = "app-alb"
   load_balancer_type = "application"
   subnets            = [aws_subnet.public_subnet[0].id, aws_subnet.public_subnet[1].id]
   security_groups    = [aws_security_group.public_sg.id]
+    tags = {
+    Name = "app-alb-${terraform.workspace}"  
+  }
 }
 resource "aws_lb_listener" "front_endd" {
   load_balancer_arn = aws_lb.app_alb.arn
@@ -85,6 +103,9 @@ resource "aws_lb_listener" "front_endd" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.app_lb_alb_tg.arn
+  }
+    tags = {
+    Name = "front-end-${terraform.workspace}"  
   }
 }
 resource "aws_lb_target_group" "app_lb_alb_tg" {
@@ -102,6 +123,9 @@ resource "aws_lb_target_group" "app_lb_alb_tg" {
     timeout             = 5
     healthy_threshold   = 2
     unhealthy_threshold = 2
+  }
+  tags = {
+    Name = "app-lb-alb-tg-${terraform.workspace}"  
   }
 }
 

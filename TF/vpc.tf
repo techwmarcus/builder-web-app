@@ -53,7 +53,7 @@ resource "aws_subnet" "public_subnet" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "public-subnet-lb"
+    Name = "public-subnet-lb${terraform.workspace}"
   }
 }
 resource "aws_security_group" "public_sg" {
@@ -74,7 +74,7 @@ egress {
     cidr_blocks = ["0.0.0.0/0"]
 }
 tags = {
-    Name = "public-sg"
+    Name = "public-sg${terraform.workspace}"
 }
 }
 
@@ -98,7 +98,7 @@ resource "aws_security_group" "private_sg" {
   }
 
   tags = {
-    Name = "private-sg"
+    Name = "private-sg${terraform.workspace}"
   }
 }
 
@@ -113,7 +113,7 @@ resource "aws_subnet" "private_subnet_1" {
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    Name = "private-subnet-1"
+    Name = "private-subnet-1${terraform.workspace}"
   }
 }
 
@@ -131,7 +131,7 @@ resource "aws_route_table" "public_rt" {
   }
 
   tags = {
-    Name = "public-route-table"
+    Name = "public-route-table${terraform.workspace}"
   }
 }
 resource "aws_route_table" "private_rt" {
@@ -143,7 +143,7 @@ resource "aws_route_table" "private_rt" {
   }
 
   tags = {
-    Name = "private-route-table"
+    Name = "private-route-table${terraform.workspace}"
   }
 }
 
