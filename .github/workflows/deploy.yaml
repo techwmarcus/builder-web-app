@@ -28,6 +28,12 @@ jobs:
         with:
           terraform_version: 1.14.7 
 
+      - name: Terraform lint
+        uses: terraform-linters/setup-tflint@v4
+      - run: |
+          tflint --init
+          tflint
+
       - name: Terraform Init
         run: terraform init
         working-directory: ./TF
