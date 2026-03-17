@@ -32,7 +32,7 @@ jobs:
         uses: terraform-linters/setup-tflint@v4
       - run: |
           tflint --init
-          tflint ./TF
+          tflint --chdir=TF
 
       - name: Terraform Init
         run: terraform init
